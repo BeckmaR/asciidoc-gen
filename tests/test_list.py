@@ -2,7 +2,7 @@ import asciidoc_gen as adg
 
 
 def test_lists(tmp_path):
-    doc = adg.AsciiDocDocument(tmp_path / "doc.adoc")
+    doc = adg.AsciiDocDocument(path=tmp_path / "doc.adoc")
     (
         adg.UnorderedList(doc)
         .title("Lists are awesome")
@@ -20,7 +20,7 @@ def test_lists(tmp_path):
 
 
 def test_nested_lists(tmp_path):
-    doc = adg.AsciiDocDocument(tmp_path / "doc.adoc")
+    doc = adg.AsciiDocDocument(path=tmp_path / "doc.adoc")
     (
         adg.UnorderedList(doc)
         .title("Lists are awesome")

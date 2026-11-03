@@ -1,16 +1,13 @@
 import pathlib
+from dataclasses import dataclass
 import re
 
-from .block import AsciiDocBlock
+from .element import Element
 
 
-class Document:
-    def __init__(self, path):
-        self._path = path
-
-    @property
-    def path(self):
-        return pathlib.Path(self._path)
+@dataclass
+class Document(Element):
+    path: pathlib.Path | None = None
 
     @property
     def filename(self):
@@ -27,17 +24,10 @@ class Document:
 
 
 class AsciiDocDocument(Document):
-    def __init__(self, path):
-        super().__init__(path)
-        self._blocks = []
-
     @classmethod
     def adoc(cls, name):
         return str(pathlib.Path(cls.escape_as_filename(name)).with_suffix(".adoc"))
 
-    def add_block(self, block: AsciiDocBlock):
-        self._blocks.append(block)
-
     def render(self):
-        text = "\n".join(str(b) for b in self._blocks)
+        text = "\n".join(str(b) for b in self._children)
         self.write_text(text)
