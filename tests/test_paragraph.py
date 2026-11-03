@@ -7,11 +7,23 @@ def test_paragraph(tmp_path):
     p = adg.Paragraph(page)
     p.add_text("Hello World!")
     page.render()
-    
+
     assert page.path.read_text() == "Hello World!\n"
+
 
 def test_multiple_paragraphs(tmp_path):
     page = adg.AsciiDocDocument(tmp_path / "doc.adoc")
-    adg.Paragraph(page).add_text("To be, or not to be, that is the question.").add_text("(Socrates)")
+    adg.Paragraph(page).add_text("To be, or not to be, that is the question.").add_text(
+        "(William Shakespeare)"
+    )
+    adg.Paragraph(page).add_text(
+        "Your time is limited, so don't waste it living someone else's life."
+    ).add_text("(Steve Jobs)")
     page.render()
-    assert page.path.read_text() == "To be, or not to be, that is the question.\n(Socrates)\n"
+    assert (
+        page.path.read_text() == "To be, or not to be, that is the question.\n"
+        "(William Shakespeare)\n"
+        "\n"
+        "Your time is limited, so don't waste it living someone else's life.\n"
+        "(Steve Jobs)\n"
+    )
