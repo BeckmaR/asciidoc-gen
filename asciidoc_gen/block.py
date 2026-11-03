@@ -1,8 +1,8 @@
-class AsciiDocBlock:
-    def __init__(self, document):
-        self._doc = document
-        document.add_block(self)
+from .element import Element
+from dataclasses import dataclass, field
 
+
+class AsciiDocBlock(Element):
     def render(self):
         raise NotImplementedError("Must be overridden in child classes")
 
@@ -13,12 +13,11 @@ class AsciiDocBlock:
         return text
 
 
+@dataclass
 class Section(AsciiDocBlock):
-    def __init__(self, document):
-        super().__init__(document)
-        self._level = 1
-        self._custom_id = None
-        self._title = None
+    _level: int = 1
+    _custom_id: str = None
+    _title: str = None
 
     def level(self, level: int):
         self._level = level
@@ -41,10 +40,9 @@ class Section(AsciiDocBlock):
         return text
 
 
+@dataclass
 class Paragraph(AsciiDocBlock):
-    def __init__(self, document):
-        super().__init__(document)
-        self._text_items = []
+    _text_items: list[str] = field(default_factory=list, init=False)
 
     def add_text(self, text):
         self._text_items.append(text)
@@ -54,11 +52,10 @@ class Paragraph(AsciiDocBlock):
         return "\n".join(str(s) for s in self._text_items)
 
 
+@dataclass
 class IncludeMacro(AsciiDocBlock):
-    def __init__(self, document):
-        super().__init__(document)
-        self._target = None
-        self._leveloffset = None
+    _target: str = None
+    _leveloffset: str = None
 
     def target(self, target):
         self._target = target
@@ -76,8 +73,8 @@ class IncludeMacro(AsciiDocBlock):
 
 
 class UnorderedList(AsciiDocBlock):
-    def __init__(self, document):
-        super().__init__(document)
+    def __init__(self, parent):
+        super().__init__(parent)
         self._items = []
         self._title = None
 

@@ -3,7 +3,7 @@ import asciidoc_gen as adg
 
 
 def test_paragraph(tmp_path):
-    page = adg.AsciiDocDocument(tmp_path / "doc.adoc")
+    page = adg.AsciiDocDocument(path=tmp_path / "doc.adoc")
     p = adg.Paragraph(page)
     p.add_text("Hello World!")
     page.render()
@@ -12,7 +12,7 @@ def test_paragraph(tmp_path):
 
 
 def test_multiple_paragraphs(tmp_path):
-    page = adg.AsciiDocDocument(tmp_path / "doc.adoc")
+    page = adg.AsciiDocDocument(path=tmp_path / "doc.adoc")
     adg.Paragraph(page).add_text("To be, or not to be, that is the question.").add_text(
         "(William Shakespeare)"
     )
