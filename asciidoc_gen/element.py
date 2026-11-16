@@ -10,6 +10,7 @@ class RootElement:
 
     def add(self, other: "Element"):
         self._children.append(other)
+        other._parent = self
 
     def __enter__(self):
         self._context_token = _current_context.set(self)
