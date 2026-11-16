@@ -64,6 +64,12 @@ class Paragraph(AsciiDocBlock):
 
 
 @dataclass
+class ExampleBlock(AsciiDocBlock):
+    def _render_block_content(self):
+        return f"====\n{super()._render_block_content()}\n===="
+
+
+@dataclass
 class IncludeMacro(LineElement):
     target: str = None
     leveloffset: str = None
