@@ -62,8 +62,12 @@ class IncludeMacro(LineElement):
 
 
 @dataclass
-class UnorderedListItem(BlockElement):
+class ListItem(BlockElement):
     level: int = 1
+
+
+@dataclass
+class UnorderedListItem(ListItem):
     
     def _render(self):
         return f"{self.level * "*"} {"\n".join(str(c) for c in self._children)}"
@@ -71,4 +75,5 @@ class UnorderedListItem(BlockElement):
 
 @dataclass
 class List(AsciiDocBlock):
-    pass
+    def _render_block_content(self):
+        return "\n".join(str(s).strip() for s in self._children_by_type(ListItem))
