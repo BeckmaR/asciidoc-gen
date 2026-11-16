@@ -26,6 +26,11 @@ class RootElement:
     def _children_by_type(self, cls):
         return filter(lambda c: isinstance(c, cls), self._children)
 
+    def _last_child_by_type(self, cls):
+        items = list(self._children_by_type(cls))
+        if not items:
+            return None
+        return items[-1]
 
 @dataclass
 class ChildElement:
