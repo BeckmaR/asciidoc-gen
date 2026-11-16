@@ -10,7 +10,7 @@ class Title(LineElement):
 
 @dataclass
 class AsciiDocBlock(BlockElement):
-    _title: Title | str = ""
+    _title: Title | str = field(default="", init=False)
 
     def add(self, element: Element):
         if isinstance(element, Title):
