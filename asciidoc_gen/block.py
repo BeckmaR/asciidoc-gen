@@ -32,23 +32,15 @@ class AsciiDocBlock(BlockElement):
 
 @dataclass
 class Section(BlockElement):
-    _level: int = 1
-    _custom_id: str = None
-
-    def level(self, level: int):
-        self._level = level
-        return self
-
-    def custom_id(self, id):
-        self._custom_id = id
-        return self
+    level: int = 1
+    custom_id: str = None
 
     def _render(self):
         text = ""
-        if self._custom_id:
-            text = f"[#{self._custom_id}]\n"
+        if self.custom_id:
+            text = f"[#{self.custom_id}]\n"
 
-        text += f"{self._level*'='} {"".join(str(s) for s in self._children)}"
+        text += f"{self.level*'='} {"".join(str(s) for s in self._children)}"
         return text
 
 
@@ -59,22 +51,14 @@ class Paragraph(AsciiDocBlock):
 
 @dataclass
 class IncludeMacro(LineElement):
-    _target: str = None
-    _leveloffset: str = None
-
-    def target(self, target):
-        self._target = target
-        return self
-
-    def leveloffset(self, offset):
-        self._leveloffset = offset
-        return self
+    target: str = None
+    leveloffset: str = None
 
     def _render(self):
         attributes = []
-        if self._leveloffset:
-            attributes.append(f"leveloffset={self._leveloffset}")
-        return f"include::{self._target}[{",".join(attributes)}]"
+        if self.leveloffset:
+            attributes.append(f"leveloffset={self.leveloffset}")
+        return f"include::{self.target}[{",".join(attributes)}]"
 
 
 @dataclass
