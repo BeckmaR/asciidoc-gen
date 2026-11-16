@@ -2,11 +2,11 @@ import pathlib
 from dataclasses import dataclass
 import re
 
-from .element import Element
+from .element import RootElement
 
 
 @dataclass
-class Document(Element):
+class Document(RootElement):
     path: pathlib.Path | None = None
 
     @property

@@ -1,23 +1,39 @@
-from .element import Element
+from .element import Element, ChildElement, RootElement, InlineElement, LineElement, BlockElement, SimpleTextElement
 from dataclasses import dataclass, field
 
 
-class AsciiDocBlock(Element):
-    def render(self):
-        raise NotImplementedError("Must be overridden in child classes")
 
-    def __str__(self):
-        text = self.render()
-        if text and not text[-1] == "\n":
-            text += "\n"
-        return text
+class Title(LineElement):
+    def _render(self):
+        return f".{super()._render()}"
 
 
 @dataclass
-class Section(AsciiDocBlock):
+class AsciiDocBlock(BlockElement):
+    _title: Title | str = ""
+
+    def add(self, element: Element):
+        if isinstance(element, Title):
+            self._title = element
+        else:
+            super().add(element)
+    
+    def _render_block_title(self):
+        if not self._title:
+            return ""
+        return str(self._title)
+    
+    def _render_block_content(self):
+        return "\n".join(str(s).strip() for s in self._children)
+
+    def _render(self):
+        return self._render_block_title() + self._render_block_content()
+
+
+@dataclass
+class Section(BlockElement):
     _level: int = 1
     _custom_id: str = None
-    _title: str = None
 
     def level(self, level: int):
         self._level = level
@@ -27,33 +43,22 @@ class Section(AsciiDocBlock):
         self._custom_id = id
         return self
 
-    def title(self, title):
-        self._title = title
-        return self
-
-    def render(self):
+    def _render(self):
         text = ""
         if self._custom_id:
             text = f"[#{self._custom_id}]\n"
 
-        text += f"{self._level*'='} {self._title}"
+        text += f"{self._level*'='} {"".join(str(s) for s in self._children)}"
         return text
 
 
 @dataclass
 class Paragraph(AsciiDocBlock):
-    _text_items: list[str] = field(default_factory=list, init=False)
-
-    def add_text(self, text):
-        self._text_items.append(text)
-        return self
-
-    def render(self):
-        return "\n".join(str(s) for s in self._text_items)
+    pass
 
 
 @dataclass
-class IncludeMacro(AsciiDocBlock):
+class IncludeMacro(LineElement):
     _target: str = None
     _leveloffset: str = None
 
@@ -65,31 +70,21 @@ class IncludeMacro(AsciiDocBlock):
         self._leveloffset = offset
         return self
 
-    def render(self):
+    def _render(self):
         attributes = []
         if self._leveloffset:
             attributes.append(f"leveloffset={self._leveloffset}")
         return f"include::{self._target}[{",".join(attributes)}]"
 
 
-class UnorderedList(AsciiDocBlock):
-    def __init__(self, parent):
-        super().__init__(parent)
-        self._items = []
-        self._title = None
+@dataclass
+class UnorderedListItem(BlockElement):
+    level: int = 1
+    
+    def _render(self):
+        return f"{self.level * "*"} {"\n".join(str(c) for c in self._children)}"
 
-    def title(self, title):
-        self._title = title
-        return self
 
-    def add_item(self, item, level=1):
-        self._items.append((level, item))
-        return self
-
-    def render(self):
-        text = ""
-        if self._title:
-            text += f".{str(self._title)}\n"
-        for level, item in self._items:
-            text += f"{level*"*"} {str(item)}\n"
-        return text
+@dataclass
+class List(AsciiDocBlock):
+    pass

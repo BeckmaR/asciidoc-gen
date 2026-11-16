@@ -2,28 +2,68 @@ import pytest
 import asciidoc_gen as adg
 
 
-def test_paragraph(tmp_path):
-    page = adg.AsciiDocDocument(path=tmp_path / "doc.adoc")
-    p = adg.Paragraph(page)
-    p.add_text("Hello World!")
-    page.render()
+def test_paragraph():
+    with adg.Paragraph() as p:
+        adg.Text("Hello World")
 
-    assert page.path.read_text() == "Hello World!\n"
+        assert len(p.children) == 1
+
+        assert str(p) == "Hello World\n"
 
 
-def test_multiple_paragraphs(tmp_path):
-    page = adg.AsciiDocDocument(path=tmp_path / "doc.adoc")
-    adg.Paragraph(page).add_text("To be, or not to be, that is the question.").add_text(
-        "(William Shakespeare)"
-    )
-    adg.Paragraph(page).add_text(
-        "Your time is limited, so don't waste it living someone else's life."
-    ).add_text("(Steve Jobs)")
-    page.render()
-    assert (
-        page.path.read_text() == "To be, or not to be, that is the question.\n"
-        "(William Shakespeare)\n"
-        "\n"
-        "Your time is limited, so don't waste it living someone else's life.\n"
-        "(Steve Jobs)\n"
-    )
+def test_long_paragraph():
+    with adg.Paragraph() as p:
+        adg.Text("To be, or not to be, that is the question.")
+        adg.Text("(William Shakespeare)")
+
+        assert len(p.children) == 2
+        assert (str(p) ==
+                "To be, or not to be, that is the question.\n"
+                "(William Shakespeare)\n"
+                )
+
+
+def test_paragraph_title():
+    with adg.Paragraph() as p:
+        adg.Title(text="Famous quote")
+        adg.Text("To be, or not to be, that is the question.")
+        adg.Text("(William Shakespeare)")
+
+        assert p._title
+
+        assert (str(p) ==
+                ".Famous quote\n"
+                "To be, or not to be, that is the question.\n"
+                "(William Shakespeare)\n"
+                )
+
+
+def test_paragraph_title_out_of_order():
+    with adg.Paragraph() as p:
+        adg.Text("To be, or not to be, that is the question.")
+        adg.Text("(William Shakespeare)")
+        adg.Title(text="Famous quote")
+
+        assert p._title
+
+        assert (str(p) ==
+                ".Famous quote\n"
+                "To be, or not to be, that is the question.\n"
+                "(William Shakespeare)\n"
+                )
+
+
+def test_paragraph_title_twice():
+    with adg.Paragraph() as p:
+        adg.Text("To be, or not to be, that is the question.")
+        adg.Text("(William Shakespeare)")
+        adg.Title(text="First title")
+        adg.Title(text="Famous quote")
+
+        assert p._title
+
+        assert (str(p) ==
+                ".Famous quote\n"
+                "To be, or not to be, that is the question.\n"
+                "(William Shakespeare)\n"
+                )
