@@ -21,6 +21,9 @@ class RootElement:
     @property
     def children(self):
         return list(self._children)
+    
+    def _children_by_type(self, cls):
+        return filter(lambda c: isinstance(c, cls), self._children)
 
 
 @dataclass
@@ -71,6 +74,7 @@ class InlineElement(SimpleTextElement):
         text = text.replace("\r", " ")
         text = text.strip()
         return text
+
 
 @dataclass
 class LineElement(SimpleTextElement):
