@@ -29,7 +29,7 @@ def test_paragraph_title():
         adg.Text("To be, or not to be, that is the question.")
         adg.Text("(William Shakespeare)")
 
-        assert p._title
+        assert p.title
 
         assert (str(p) ==
                 ".Famous quote\n"
@@ -44,7 +44,7 @@ def test_paragraph_title_out_of_order():
         adg.Text("(William Shakespeare)")
         adg.Title(text="Famous quote")
 
-        assert p._title
+        assert p.title
 
         assert (str(p) ==
                 ".Famous quote\n"
@@ -60,7 +60,7 @@ def test_paragraph_title_twice():
         adg.Title(text="First title")
         adg.Title(text="Famous quote")
 
-        assert p._title
+        assert p.title
 
         assert (str(p) ==
                 ".Famous quote\n"

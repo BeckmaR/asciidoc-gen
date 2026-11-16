@@ -1,4 +1,5 @@
 from .element import Element, ChildElement, RootElement, InlineElement, LineElement, BlockElement, SimpleTextElement
+from .attr import AttrList, Attribute, NamedAttribute
 from dataclasses import dataclass, field
 
 
@@ -10,38 +11,51 @@ class Title(LineElement):
 
 @dataclass
 class AsciiDocBlock(BlockElement):
-    _title: Title | str = field(default="", init=False)
-
     def add(self, element: Element):
-        if isinstance(element, Title):
-            self._title = element
+        if isinstance(element, Attribute):
+            if not self.attrlist:
+                self.add(AttrList(parent=self))
+            self.attrlist.add(element)
+            
         else:
             super().add(element)
     
+    @property
+    def title(self):
+        return self._last_child_by_type(Title)
+    
+    @property
+    def attrlist(self):
+        return self._last_child_by_type(AttrList)
+    
+    @property
+    def block_content(self):
+        exclude_types = [AttrList, Title]
+        return (c for c in self._children if not any(isinstance(c, et) for et in exclude_types))
+    
     def _render_block_title(self):
-        if not self._title:
+        if not self.title:
             return ""
-        return str(self._title)
+        return str(self.title)
+    
+    def _render_attr_list(self):
+        if not self.attrlist:
+            return ""
+        return str(self.attrlist) + "\n"
     
     def _render_block_content(self):
-        return "\n".join(str(s).strip() for s in self._children)
+        return "\n".join(str(s).strip() for s in self.block_content)
 
     def _render(self):
-        return self._render_block_title() + self._render_block_content()
+        return self._render_block_title() + self._render_attr_list() + self._render_block_content()
 
 
 @dataclass
-class Section(BlockElement):
+class Section(AsciiDocBlock):
     level: int = 1
-    custom_id: str = None
 
-    def _render(self):
-        text = ""
-        if self.custom_id:
-            text = f"[#{self.custom_id}]\n"
-
-        text += f"{self.level*'='} {"".join(str(s) for s in self._children)}"
-        return text
+    def _render_block_content(self):
+        return f"{self.level*'='} {"".join(str(s) for s in self.block_content)}"
 
 
 @dataclass
@@ -53,12 +67,16 @@ class Paragraph(AsciiDocBlock):
 class IncludeMacro(LineElement):
     target: str = None
     leveloffset: str = None
+    attrs: AttrList = field(default=None, init=False)
+    
+    def __post_init__(self, text):
+        super().__post_init__(text)
+        self.attrs = AttrList(parent=self)
 
     def _render(self):
-        attributes = []
         if self.leveloffset:
-            attributes.append(f"leveloffset={self.leveloffset}")
-        return f"include::{self.target}[{",".join(attributes)}]"
+            NamedAttribute(parent=self.attrs, name="leveloffset", value=self.leveloffset)
+        return f"include::{self.target}{str(self.attrs)}"
 
 
 @dataclass
@@ -75,5 +93,6 @@ class UnorderedListItem(ListItem):
 
 @dataclass
 class List(AsciiDocBlock):
-    def _render_block_content(self):
-        return "\n".join(str(s).strip() for s in self._children_by_type(ListItem))
+    @property
+    def block_content(self):
+        return self._children_by_type(ListItem)
