@@ -11,6 +11,8 @@ class Title(LineElement):
 
 @dataclass
 class AsciiDocBlock(BlockElement):
+    _delimiter: str = ""
+
     def add(self, element: Element):
         if isinstance(element, ElementAttribute):
             if not self.attrlist:
@@ -67,7 +69,13 @@ class AsciiDocBlock(BlockElement):
         return "\n".join(str(s).strip() for s in self.block_content)
 
     def _render(self):
-        return self._render_block_title() + self._render_attr_list() + self._render_block_content()
+        return ( 
+                self._render_block_title() +
+                self._render_attr_list() +
+                self._ensure_oneline(self._delimiter) +
+                self._ensure_endline(self._render_block_content()) +
+                self._ensure_oneline(self._delimiter)
+        )
 
 
 @dataclass
@@ -85,8 +93,7 @@ class Paragraph(AsciiDocBlock):
 
 @dataclass
 class ExampleBlock(AsciiDocBlock):
-    def _render_block_content(self):
-        return f"====\n{super()._render_block_content()}\n===="
+    _delimiter: str = "===="
 
 
 @dataclass
