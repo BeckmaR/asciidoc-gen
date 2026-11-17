@@ -20,6 +20,30 @@ class AsciiDocBlock(BlockElement):
         else:
             super().add(element)
     
+    def option(self, value):
+        OptionAttribute(value, parent=self)
+        return self
+    
+    def id(self, value):
+        IDAttribute(value, parent=self)
+        return self
+    
+    def style(self, value):
+        BlockStyleAttribute(value, parent=self)
+        return self
+    
+    def role(self, value):
+        RoleAttribute(value, parent=self)
+        return self
+    
+    def pos_attr(self, value):
+        PositionalAttribute(value, parent=self)
+        return self
+
+    def named_attr(self, name, value):
+        NamedAttribute(value, name, parent=self)
+        return self
+    
     @property
     def title(self):
         return self._last_child_by_type(Title)
