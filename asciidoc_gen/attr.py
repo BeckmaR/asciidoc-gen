@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from .element import ChildElement, InlineElement
 
 @dataclass
-class Attribute(ChildElement):
+class ElementAttribute(ChildElement):
     value: str
         
     def _render(self):
@@ -14,12 +14,12 @@ class Attribute(ChildElement):
 
 
 @dataclass
-class PositionalAttribute(Attribute):
+class PositionalAttribute(ElementAttribute):
     pass
 
 
 @dataclass
-class ShortHandAttribute(Attribute):
+class ShortHandAttribute(ElementAttribute):
     pass
 
 
@@ -47,7 +47,7 @@ class OptionAttribute(ShortHandAttribute):
 
 
 @dataclass
-class NamedAttribute(Attribute):
+class NamedAttribute(ElementAttribute):
     name: str
 
     def _render(self):

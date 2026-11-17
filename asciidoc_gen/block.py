@@ -1,5 +1,5 @@
 from .element import Element, ChildElement, RootElement, InlineElement, LineElement, BlockElement, SimpleTextElement
-from .attr import AttrList, Attribute, NamedAttribute
+from .attr import AttrList, BlockStyleAttribute, ElementAttribute, IDAttribute, NamedAttribute, OptionAttribute, PositionalAttribute, RoleAttribute
 from dataclasses import dataclass, field
 
 
@@ -12,7 +12,7 @@ class Title(LineElement):
 @dataclass
 class AsciiDocBlock(BlockElement):
     def add(self, element: Element):
-        if isinstance(element, Attribute):
+        if isinstance(element, ElementAttribute):
             if not self.attrlist:
                 self.add(AttrList(parent=self))
             self.attrlist.add(element)
