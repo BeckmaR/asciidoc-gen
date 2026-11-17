@@ -58,14 +58,10 @@ class AsciiDocBlock(BlockElement):
         return (c for c in self._children if not any(isinstance(c, et) for et in exclude_types))
     
     def _render_block_title(self):
-        if not self.title:
-            return ""
-        return str(self.title)
+        return self._ensure_oneline(self.title)
     
     def _render_attr_list(self):
-        if not self.attrlist:
-            return ""
-        return str(self.attrlist) + "\n"
+        return self._ensure_oneline(self.attrlist)
     
     def _render_block_content(self):
         return "\n".join(str(s).strip() for s in self.block_content)

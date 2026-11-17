@@ -62,6 +62,26 @@ class Element(RootElement, ChildElement):
 @dataclass
 class SimpleTextElement(Element):
     text: InitVar[str | None] = None
+    
+    def _ensure_str(self, s):
+        if not s:
+            return ""
+        if not isinstance(s, str):
+            return str(s)
+        return s
+    
+    def _ensure_inline(self, s: str):
+        if not s:
+            return ""
+        return self._ensure_str(s).replace("\n", " ").replace("\r", " ").strip()
+    
+    def _ensure_endline(self, s: str):
+        if not s:
+            return ""
+        return self._ensure_str(s).strip() + "\n"
+    
+    def _ensure_oneline(self, s: str):
+        return self._ensure_endline(self._ensure_inline(s))
 
     def __post_init__(self, text):
         super().__post_init__()
@@ -75,11 +95,7 @@ class InlineElement(SimpleTextElement):
         return "".join(str(c) for c in self._children)
 
     def __str__(self):
-        text = self._render()
-        text = text.replace("\n", " ")
-        text = text.replace("\r", " ")
-        text = text.strip()
-        return text
+        return self._ensure_inline(self._render())
 
 
 @dataclass
@@ -88,11 +104,7 @@ class LineElement(SimpleTextElement):
         return "".join(str(c) for c in self._children)
 
     def __str__(self):
-        text = self._render()
-        text = text.replace("\n", " ")
-        text = text.replace("\r", " ")
-        text = text.strip()
-        return text + "\n"
+        return self._ensure_oneline(self._render())
 
 
 class BlockElement(SimpleTextElement):
@@ -100,9 +112,4 @@ class BlockElement(SimpleTextElement):
         raise NotImplementedError("Must be overridden in child classes")
 
     def __str__(self):
-        text = self._render()
-        if text is None:
-            return ""
-        if text and not text[-1] == "\n":
-            text += "\n"
-        return text
+        return self._ensure_endline(self._render())
