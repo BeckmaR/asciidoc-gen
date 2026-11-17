@@ -22,7 +22,7 @@ class RootElement:
     @property
     def children(self):
         return list(self._children)
-    
+
     def _children_by_type(self, cls):
         return filter(lambda c: isinstance(c, cls), self._children)
 
@@ -31,6 +31,7 @@ class RootElement:
         if not items:
             return None
         return items[-1]
+
 
 @dataclass
 class ChildElement:
@@ -62,24 +63,24 @@ class Element(RootElement, ChildElement):
 @dataclass
 class SimpleTextElement(Element):
     text: InitVar[str | None] = None
-    
+
     def _ensure_str(self, s):
         if not s:
             return ""
         if not isinstance(s, str):
             return str(s)
         return s
-    
+
     def _ensure_inline(self, s: str):
         if not s:
             return ""
         return self._ensure_str(s).replace("\n", " ").replace("\r", " ").strip()
-    
+
     def _ensure_endline(self, s: str):
         if not s:
             return ""
         return self._ensure_str(s).strip() + "\n"
-    
+
     def _ensure_oneline(self, s: str):
         return self._ensure_endline(self._ensure_inline(s))
 

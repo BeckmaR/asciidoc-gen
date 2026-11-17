@@ -2,10 +2,11 @@ from dataclasses import dataclass
 
 from .element import ChildElement, InlineElement
 
+
 @dataclass
 class ElementAttribute(ChildElement):
     value: str
-        
+
     def _render(self):
         return self.value
 
@@ -58,15 +59,15 @@ class NamedAttribute(ElementAttribute):
 class AttrList(InlineElement):
     def _render(self):
         attrs = []
-        
+
         shorthand_attribute = ""
         for cls in [BlockStyleAttribute, IDAttribute, RoleAttribute, OptionAttribute]:
             for item in self._children_by_type(cls):
                 shorthand_attribute += str(item)
         if shorthand_attribute:
             attrs.append(shorthand_attribute)
-        
+
         attrs.extend(self._children_by_type(PositionalAttribute))
         attrs.extend(self._children_by_type(NamedAttribute))
-        
+
         return f"[{",".join(str(a) for a in attrs)}]"
