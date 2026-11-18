@@ -37,6 +37,7 @@ def test_paragraph_title():
                 "(William Shakespeare)\n"
                 ) # fmt: skip
 
+
 def test_paragraph_title_shorthand():
     with adg.Paragraph().title("Famous quote") as p:
         adg.Text("To be, or not to be, that is the question.")

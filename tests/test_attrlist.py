@@ -1,5 +1,6 @@
 import asciidoc_gen as adoc
 
+
 def test_attrlist_empty():
     with adoc.AttrList() as l:
         assert str(l) == "[]"
@@ -12,10 +13,10 @@ def test_shorthand_attributes():
 
         adoc.BlockStyleAttribute(value="appendix")
         assert str(l) == "[appendix%headers]"
-        
+
         adoc.RoleAttribute(value="big")
         assert str(l) == "[appendix.big%headers]"
-        
+
         adoc.RoleAttribute(value="verybig")
         assert str(l) == "[appendix.big.verybig%headers]"
 
@@ -54,11 +55,14 @@ def test_everything():
         adoc.OptionAttribute("headers")
 
         adoc.BlockStyleAttribute(value="appendix")
-        
+
         adoc.RoleAttribute(value="big")
-        
+
         adoc.RoleAttribute(value="verybig")
 
         adoc.IDAttribute(value="sesame_street")
-        
-        assert str(l) == "[appendix#sesame_street.big.verybig%headers,cookies,320,640,sunset,favorite_food=cookies,fur_color=blue]"
+
+        assert (
+            str(l)
+            == "[appendix#sesame_street.big.verybig%headers,cookies,320,640,sunset,favorite_food=cookies,fur_color=blue]"
+        )

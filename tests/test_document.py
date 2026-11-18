@@ -22,9 +22,9 @@ def test_multiple_elements(tmp_path):
             adg.UnorderedListItem("Lists")
             adg.UnorderedListItem("Lists")
             adg.UnorderedListItem("Lists")
-        
+
         adg.IncludeMacro(target="includeme.adoc")
-        
+
         doc.render()
         assert (
             doc.path.read_text() == ""

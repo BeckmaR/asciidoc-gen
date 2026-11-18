@@ -7,7 +7,7 @@ def test_lists():
         adg.UnorderedListItem("Cucumbers")
         adg.UnorderedListItem("Tomatoes")
         adg.UnorderedListItem("Bacon")
-    
+
         assert (
             str(l) == ".Lists are awesome\n"
             "* Cucumbers\n"
@@ -24,7 +24,7 @@ def test_nested_lists():
         adg.UnorderedListItem("Tomatoes", level=2)
         adg.UnorderedListItem("Deli")
         adg.UnorderedListItem("Bacon", level=2)
-    
+
         assert (
             str(l) == ".Lists are awesome\n"
             "* Veggies\n"
