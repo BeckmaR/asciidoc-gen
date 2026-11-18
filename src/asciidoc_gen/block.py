@@ -31,9 +31,9 @@ class AsciiDocBlock(BlockElement):
 
     def add(self, element: Element):
         if isinstance(element, ElementAttribute):
-            if not self.attrlist:
+            if not self._attrlist:
                 self.add(AttrList(parent=self))
-            self.attrlist.add(element)
+            self._attrlist.add(element)
 
         else:
             super().add(element)
@@ -63,15 +63,15 @@ class AsciiDocBlock(BlockElement):
         return self
 
     @property
-    def title(self):
+    def _title(self):
         return self._last_child_by_type(Title)
 
     @property
-    def attrlist(self):
+    def _attrlist(self):
         return self._last_child_by_type(AttrList)
 
     @property
-    def block_content(self):
+    def _block_content(self):
         exclude_types = [AttrList, Title]
         return (
             c
@@ -80,13 +80,13 @@ class AsciiDocBlock(BlockElement):
         )
 
     def _render_block_title(self):
-        return self._ensure_oneline(self.title)
+        return self._ensure_oneline(self._title)
 
     def _render_attr_list(self):
-        return self._ensure_oneline(self.attrlist)
+        return self._ensure_oneline(self._attrlist)
 
     def _render_block_content(self):
-        return "\n".join(str(s).strip() for s in self.block_content)
+        return "\n".join(str(s).strip() for s in self._block_content)
 
     def _render(self):
         return (
@@ -103,7 +103,7 @@ class Section(AsciiDocBlock):
     level: int = 1
 
     def _render_block_content(self):
-        return f"{self.level*'='} {"".join(str(s) for s in self.block_content)}"
+        return f"{self.level*'='} {"".join(str(s) for s in self._block_content)}"
 
 
 @dataclass
