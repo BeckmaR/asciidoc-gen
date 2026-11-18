@@ -40,4 +40,4 @@ def test_multiple_elements(tmp_path):
                 "* Lists\n"
                 "\n"
                 "include::includeme.adoc[]\n"
-        )
+        ) # fmt: skip

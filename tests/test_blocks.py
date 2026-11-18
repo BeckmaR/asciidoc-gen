@@ -10,7 +10,7 @@ def test_example_block():
                 "Text\n"
                 "Text\n"
                 "====\n"
-                )
+                ) # fmt: skip
 
 
 def test_example_block_id():
@@ -24,7 +24,7 @@ def test_example_block_id():
                 "Text\n"
                 "Text\n"
                 "====\n"
-                )
+                ) # fmt: skip
 
 
 def test_example_block_role():
@@ -38,7 +38,7 @@ def test_example_block_role():
                 "Text\n"
                 "Text\n"
                 "====\n"
-                )
+                ) # fmt: skip
 
 
 def test_example_block_role_title():
@@ -53,4 +53,4 @@ def test_example_block_role_title():
                 "Text\n"
                 "Text\n"
                 "====\n"
-                )
+                ) # fmt: skip

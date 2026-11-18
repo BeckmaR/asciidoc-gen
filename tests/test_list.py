@@ -13,7 +13,7 @@ def test_lists():
             "* Cucumbers\n"
             "* Tomatoes\n"
             "* Bacon\n"
-        )
+        ) # fmt: skip
 
 
 def test_nested_lists():
@@ -32,4 +32,4 @@ def test_nested_lists():
             "** Tomatoes\n"
             "* Deli\n"
             "** Bacon\n"
-        )
+        ) # fmt: skip
