@@ -8,9 +8,10 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+  workflow_call:
 
 jobs:
-  build:
+  test:
 
     runs-on: ubuntu-latest
     strategy:
