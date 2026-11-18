@@ -39,3 +39,18 @@ def test_example_block_role():
                 "Text\n"
                 "====\n"
                 )
+
+
+def test_example_block_role_title():
+    with adoc.ExampleBlock().role("blue").title("Title") as b:
+        adoc.Text("Text")
+        adoc.Text("Text")
+
+        assert (str(b) == ""
+                ".Title\n"
+                "[.blue]\n"
+                "====\n"
+                "Text\n"
+                "Text\n"
+                "====\n"
+                )
