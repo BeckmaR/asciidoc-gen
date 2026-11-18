@@ -11,18 +11,16 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
 ]
-dependencies = [
-    "flake8>=7.5.0",
-]
 
 [dependency-groups]
 dev = [
     "black>=26.10.1,<27",
     "pytest>=9.2.0,<10",
+    "flake8>=7.5.0",
 ]
 
 [tool.uv]
-default-groups = "all"
+default-groups = ["dev"]
 
 [build-system]
 requires = ["uv_build>=0.13.9,<0.14.0"]
