@@ -11,6 +11,9 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
 ]
+dependencies = [
+    "flake8>=7.5.0",
+]
 
 [dependency-groups]
 dev = [
