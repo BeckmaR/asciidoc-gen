@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field, InitVar
 from contextvars import ContextVar
+from typing import Callable, Tuple
 
 _current_context = ContextVar("adg_context", default=None)
 
@@ -49,6 +50,23 @@ class Text(ChildElement):
 
     def __str__(self):
         return str(self.text)
+
+
+@dataclass
+class LazyText(ChildElement):
+    """
+    LazyText elements call a function `func` with provided arguments `args` when the objects __str__ function is invoked.
+
+    This is useful to defer evaluations to a later point in time, for example to look up an object that does not exist yet.
+
+    Note: Due to dataclass limitations, the arguments `args` must be wrapped in a tuple - this does not work using a regular `*args` variadic parameter.
+    """
+
+    func: Callable[..., str]
+    args: Tuple = field(default_factory=tuple)
+
+    def __str__(self):
+        return self.func(*self.args)
 
 
 @dataclass

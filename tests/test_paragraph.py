@@ -20,7 +20,7 @@ def test_long_paragraph():
         assert (str(p) ==
                 "To be, or not to be, that is the question.\n"
                 "(William Shakespeare)\n"
-                )
+                ) # fmt: skip
 
 
 def test_paragraph_title():
@@ -35,7 +35,21 @@ def test_paragraph_title():
                 ".Famous quote\n"
                 "To be, or not to be, that is the question.\n"
                 "(William Shakespeare)\n"
-                )
+                ) # fmt: skip
+
+
+def test_paragraph_title_shorthand():
+    with adg.Paragraph().title("Famous quote") as p:
+        adg.Text("To be, or not to be, that is the question.")
+        adg.Text("(William Shakespeare)")
+
+        assert p.title
+
+        assert (str(p) ==
+                ".Famous quote\n"
+                "To be, or not to be, that is the question.\n"
+                "(William Shakespeare)\n"
+                ) # fmt: skip
 
 
 def test_paragraph_title_out_of_order():
@@ -50,7 +64,7 @@ def test_paragraph_title_out_of_order():
                 ".Famous quote\n"
                 "To be, or not to be, that is the question.\n"
                 "(William Shakespeare)\n"
-                )
+                ) # fmt: skip
 
 
 def test_paragraph_title_twice():
@@ -66,4 +80,4 @@ def test_paragraph_title_twice():
                 ".Famous quote\n"
                 "To be, or not to be, that is the question.\n"
                 "(William Shakespeare)\n"
-                )
+                ) # fmt: skip

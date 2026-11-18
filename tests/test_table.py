@@ -1,11 +1,12 @@
 import asciidoc_gen as adg
 
+
 def test_empty_table():
     with adg.Table() as table:
         assert (str(table) == ""
                 "|===\n"
                 "|===\n"
-                )
+                ) # fmt: skip
 
 
 def test_table():
@@ -17,7 +18,8 @@ def test_table():
                 "|===\n"
                 "|Hello|World\n"
                 "|===\n"
-                )
+                ) # fmt: skip
+
 
 def test_table_title():
     with adg.Table() as table:
@@ -30,7 +32,7 @@ def test_table_title():
                 "|===\n"
                 "|Hello|World\n"
                 "|===\n"
-                )
+                ) # fmt: skip
 
 
 def test_table_attributes():
@@ -44,7 +46,7 @@ def test_table_attributes():
                 "|===\n"
                 "|Hello|World\n"
                 "|===\n"
-                )
+                ) # fmt: skip
 
 
 def test_table_headers():
@@ -57,7 +59,7 @@ def test_table_headers():
                 "|===\n"
                 "|Hello|World\n"
                 "|===\n"
-                )
+                ) # fmt: skip
 
 
 def test_table_cols_str():
@@ -70,11 +72,11 @@ def test_table_cols_str():
                 "|===\n"
                 "|Hello|World\n"
                 "|===\n"
-                )
+                ) # fmt: skip
 
 
 def test_table_cols_list():
-    with adg.Table().cols([1,1]) as table:
+    with adg.Table().cols([1, 1]) as table:
         with adg.TableRow():
             adg.TableCell("Hello")
             adg.TableCell("World")
@@ -83,11 +85,11 @@ def test_table_cols_list():
                 "|===\n"
                 "|Hello|World\n"
                 "|===\n"
-                )
+                ) # fmt: skip
 
 
 def test_table_combined():
-    with adg.Table().header().cols([1,1]) as table:
+    with adg.Table().header().cols([1, 1]) as table:
         with adg.TableRow():
             adg.TableCell("Hello")
             adg.TableCell("World")
@@ -96,4 +98,4 @@ def test_table_combined():
                 "|===\n"
                 "|Hello|World\n"
                 "|===\n"
-                )
+                ) # fmt: skip
