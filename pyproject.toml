@@ -16,6 +16,9 @@ license-files = [
     "LICENSE",
 ]
 
+[project.urls]
+Repository = "https://github.com/BeckmaR/asciidoc-gen"
+
 [dependency-groups]
 dev = [
     "black>=26.10.1,<27",
