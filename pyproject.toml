@@ -1,18 +1,26 @@
-[tool.poetry]
+[project]
 name = "asciidoc-gen"
 version = "0.1.0"
 description = "A library to generate asciidoc documents."
-authors = ["René Beckmann <rene.bckmnn@gmail.com>"]
+authors = [{ name = "René Beckmann", email = "rene.bckmnn@gmail.com" }]
+requires-python = ">=3.12,<4"
 readme = "README.md"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+]
 
-[tool.poetry.dependencies]
-python = "^3.12"
+[dependency-groups]
+dev = [
+    "black>=26.10.1,<27",
+    "pytest>=9.2.0,<10",
+]
 
-
-[tool.poetry.group.dev.dependencies]
-black = "^26.10.1"
-pytest = "^9.2.0"
+[tool.uv]
+default-groups = "all"
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["uv_build>=0.13.9,<0.14.0"]
+build-backend = "uv_build"
