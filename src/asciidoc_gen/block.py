@@ -66,6 +66,13 @@ class AsciiDocBlock(BlockElement):
     def _title(self):
         return self._last_child_by_type(Title)
 
+    def title(self, title: str | Title):
+        if isinstance(title, str):
+            Title(title, parent=self)
+        else:
+            raise TypeError("title must be of type str")
+        return self
+
     @property
     def _attrlist(self):
         return self._last_child_by_type(AttrList)

@@ -37,6 +37,19 @@ def test_paragraph_title():
                 "(William Shakespeare)\n"
                 )
 
+def test_paragraph_title_shorthand():
+    with adg.Paragraph().title("Famous quote") as p:
+        adg.Text("To be, or not to be, that is the question.")
+        adg.Text("(William Shakespeare)")
+
+        assert p.title
+
+        assert (str(p) ==
+                ".Famous quote\n"
+                "To be, or not to be, that is the question.\n"
+                "(William Shakespeare)\n"
+                )
+
 
 def test_paragraph_title_out_of_order():
     with adg.Paragraph() as p:
